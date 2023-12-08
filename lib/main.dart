@@ -1,21 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'dart:convert';
 
 void main() async {
-  // final response = await Dio().get('http://www.google.com');
-  // print(response.data.toString());
   runApp(MyApp());
-    // final response = await http.get(
-    //     Uri.parse('http://localhost:9080/dynamic/version'),
-    //     headers: {
-    //       "Accept": "application/json",
-    //       "Access-Control_Allow_Origin": "*"
-    //     });
-
-    // print(response.statusCode);
-    // print(response.body);
-
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +23,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String fetchedText = 'No data';
+  String clientText = 'no client';
+  List<dynamic> clientMap = [];
+  List<Map<String, dynamic>> decodedJson = [];
 
   @override
   void initState() {
@@ -48,15 +40,39 @@ class _MyHomePageState extends State<MyHomePage> {
           "Accept": "application/json",
           "Access-Control-Allow-Origin": "*"
         });
+      final clients = await http.get(Uri.parse('http://localhost:9080/dynamic/clients'),
+        headers: {
+          "Accept": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        });
       // final response = await Dio().get('http://127.0.0.1:9080/dynamic/version');
+      print("response ...");
+      print(response);
 
       if (response.statusCode == 200) {
         // If the server returns a 200 OK response, parse the text
         setState(() {
-          fetchedText = response.body.toString();
+          var body = response.body.toString();
+          Map<String, dynamic> jsonMap = json.decode(body);
+          fetchedText = jsonMap['message'];
           print(fetchedText);
+          clientText = clients.body.toString();
+          decodedJson = (json.decode(clientText) as List)
+              .map((dynamic item) => item as Map<String, dynamic>)
+              .toList();
+  
+          for (var entry in decodedJson) {
+            int id = entry['id'];
+            String name = entry['name'];
+            String account = entry['account'];
+
+            print('ID: $id, Name: $name, Account: $account');
+          }
+      
+          // print(clientMap[0]);
         });
-      } else {
+      } 
+      else {
         // If the server did not return a 200 OK response,
         // throw an exception or handle the error accordingly.
         print('Failed to load data. Status code: ${response.statusCode}');
@@ -69,12 +85,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // var name = clientMap[0];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Fetch Text from URL'),
       ),
-      body: Center(
-        child: Text(fetchedText),
+      body: ListView.builder(
+        itemCount: decodedJson.length + 2, // +2 for the additional Text widgets
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Text('SAMS');
+          } 
+          else if (index == 1) {
+            return Text(fetchedText);
+          }
+          else {
+            return ListTile(
+              title: Text('ID: ${decodedJson[index - 2]['id']}'),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Name: ${decodedJson[index - 2]['name']}'),
+                  Text('Account: ${decodedJson[index - 2]['account']}'),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
