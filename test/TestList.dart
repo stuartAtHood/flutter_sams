@@ -102,6 +102,42 @@ class _MyHomePageState extends State<MyHomePage> {
           else if (index == 1) {
             return Text(fetchedText);
           }
+          // else {
+          //   return ListTile(
+          //     title: Text('ID: ${decodedJson[index - 2]['id']}'),
+          //     subtitle: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         SizedBox(height: 10.0),
+
+          //           // Builder(
+          //           //   builder: (context) {
+          //           //     return Link(
+          //           //       uri: Uri.parse('https://example.com'),
+          //           //       builder: (BuildContext context, TextStyle style, bool visited, Widget? child) {
+          //           //         return GestureDetector(
+          //           //           onTap: () {
+          //           //             launch('https://example.com');
+          //           //           },
+          //           //           child: Text(
+          //           //             'Go to Example.com',
+          //           //             style: TextStyle(
+          //           //               color: Colors.blue,
+          //           //               decoration: TextDecoration.underline,
+          //           //             ),
+          //           //           ),
+          //           //         );
+          //           //       },
+          //               );
+          //             },
+          //           ),
+
+          //         Text('Name: ${decodedJson[index - 2]['name']}'),
+          //         Text('Account: ${decodedJson[index - 2]['account']}'),
+          //       ],
+          //   ),
+          // );
+          },
         },
       ),
     );
