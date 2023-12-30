@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 import 'dart:convert';
 
 void main() async {
@@ -28,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String clientText = 'no client';
   List<dynamic> clientMap = [];
   List<Map<String, dynamic>> decodedJson = [];
+  List<dynamic> clientList = [];
 
   @override
   void initState() {
@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
           fetchedText = jsonMap['message'];
           print(fetchedText);
           clientText = clients.body.toString();
+          clientList = json.decode(clientText) as List;
           decodedJson = (json.decode(clientText) as List)
               .map((dynamic item) => item as Map<String, dynamic>)
               .toList();
@@ -89,20 +90,27 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // var name = clientMap[0];
 
+    print(clientList);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Fetch Text from URL'),
       ),
-      body: ListView.builder(
-        itemCount: decodedJson.length + 2, // +2 for the additional Text widgets
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Text('SAMS');
-          } 
-          else if (index == 1) {
-            return Text(fetchedText);
-          }
-        },
+      body: Center(
+        child: DataTable(
+          columns: [
+            DataColumn(label: Text('Id')),
+            DataColumn(label: Text('Name')),
+          ],
+          rows: decodedJson.map((map) {
+            return DataRow(
+              cells: [
+                DataCell(Text(map['id'].toString())),
+                DataCell(Text(map['name'].toString())),
+              ],
+            );
+          }).toList(),
+        ),
       ),
     );
   }
