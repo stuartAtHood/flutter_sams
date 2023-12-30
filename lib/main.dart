@@ -1,8 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'editClient.dart';
 
 void main() async {
   runApp(MyApp());
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Fetch Text from URL'),
+        title: Text('Clients'),
       ),
       body: Center(
         child: DataTable(
@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // Navigate to the second screen
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SecondScreen()),
+                          MaterialPageRoute(builder: (context) => EditableTextScreen()),
                         );
                       },
                       child: Text(map['id'].toString()),
@@ -124,20 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }).toList(),
         ),
-      ),
-    );
-  }
-}
-
-class SecondScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Second Screen'),
-      ),
-      body: Center(
-        child: Text('This is the second screen!'),
       ),
     );
   }
