@@ -105,12 +105,39 @@ class _MyHomePageState extends State<MyHomePage> {
           rows: decodedJson.map((map) {
             return DataRow(
               cells: [
-                DataCell(Text(map['id'].toString())),
+                DataCell(
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Navigate to the second screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SecondScreen()),
+                        );
+                      },
+                      child: Text(map['id'].toString()),
+                    ),
+                  ),
+                ),
                 DataCell(Text(map['name'].toString())),
               ],
             );
           }).toList(),
         ),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Second Screen'),
+      ),
+      body: Center(
+        child: Text('This is the second screen!'),
       ),
     );
   }
