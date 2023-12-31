@@ -47,9 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           "Accept": "application/json",
           "Access-Control-Allow-Origin": "*"
         });
-      // final response = await Dio().get('http://127.0.0.1:9080/dynamic/version');
-      print("response ...");
-      print(response);
+      // print(response);
 
       if (response.statusCode == 200) {
         // If the server returns a 200 OK response, parse the text
@@ -64,15 +62,13 @@ class _MyHomePageState extends State<MyHomePage> {
               .map((dynamic item) => item as Map<String, dynamic>)
               .toList();
   
+          print(decodedJson);
           for (var entry in decodedJson) {
             int id = entry['id'];
             String name = entry['name'];
             String account = entry['account'];
-
-            print('ID: $id, Name: $name, Account: $account');
+            // print('ID: $id, Name: $name, Account: $account');
           }
-      
-          // print(clientMap[0]);
         });
       } 
       else {
@@ -88,9 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // var name = clientMap[0];
-
-    print(clientList);
 
     return Scaffold(
       appBar: AppBar(
@@ -103,6 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
             DataColumn(label: Text('Name')),
           ],
           rows: decodedJson.map((map) {
+            final id = map['id'] != null ? map['id'].toString() : 'N/A';
+            final name = map['name'] != null ? map['name'].toString() : 'N/A';
+
             return DataRow(
               cells: [
                 DataCell(
@@ -112,14 +108,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         // Navigate to the second screen
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => EditableTextScreen()),
+                          // MaterialPageRoute(builder: (context) => EditableTextScreen(map['id'].toString())),
+                          MaterialPageRoute(builder: (context) => EditableTextScreen(id, name)),
                         );
                       },
-                      child: Text(map['id'].toString()),
+                      child: Text(id),
                     ),
                   ),
                 ),
-                DataCell(Text(map['name'].toString())),
+                DataCell(Text(name)),
               ],
             );
           }).toList(),
