@@ -37,12 +37,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> fetchData() async {
     try {
-      final response = await http.get(Uri.parse('http://localhost:9080/dynamic/version'),
+      final response = await http.get(Uri.parse('http://localhost:9081/dynamic/version'),
         headers: {
           "Accept": "application/json",
           "Access-Control-Allow-Origin": "*"
         });
-      final clients = await http.get(Uri.parse('http://localhost:9080/dynamic/clients'),
+      final clients = await http.get(Uri.parse('http://localhost:9081/dynamic/clients'),
         headers: {
           "Accept": "application/json",
           "Access-Control-Allow-Origin": "*"
